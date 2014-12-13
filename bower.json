@@ -1,0 +1,27 @@
+{
+  "name": "nvd3spike",
+  "version": "0.0.0",
+  "authors": [
+    "Richard Dingwall <rdingwall@gmail.com>"
+  ],
+  "license": "MIT",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "d3": "~3.4.13",
+    "nvd3": "~1.1.15-beta",
+    "jQuery": "~2.1.1",
+    "moment": "~2.8.3",
+    "colorbrewer": "~1.0.0",
+    "numeraljs": "~1.5.3"
+  },
+  "resolutions": {
+    "d3": "~3.3.13"
+  }
+}

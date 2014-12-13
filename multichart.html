@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+    <link href="bower_components/nvd3/nv.d3.css" rel="stylesheet">
+    <link href="bower_components/colorbrewer/colorbrewer.css" rel="stylesheet">
+
+    <link href="lineplusmultibarchart.css" rel="stylesheet">
+
+    <script type="text/javascript" src="bower_components/colorbrewer/colorbrewer.js"></script>
+    <script type="text/javascript" src="bower_components/jQuery/dist/jquery.js"></script>
+    <script type="text/javascript" src="bower_components/d3/d3.js"></script>
+    <script type="text/javascript" src="bower_components/nvd3/nv.d3.js"></script>
+    <script type="text/javascript" src="bower_components/moment/moment.js"></script>
+    <script type="text/javascript" src="bower_components/numeraljs/numeral.js"></script>
+    <script type="text/javascript" src="bower_components/numeraljs/languages/en-gb.js"></script>
+
+    <script type="text/javascript" src="lineplusmultibarchart2.js"></script>
+
+    <style>
+
+        #chart svg {
+            height: 200px;
+        }
+
+        svg {
+            width: 100%;
+        }
+
+        .nvd3 .nv-multibar .nv-groups rect {
+            stroke-opacity: 50% !important;
+            /*stroke: rgb(255, 255, 255) !important;*/
+            stroke: white !important;
+        }
+
+        .nvd3.multiChart .axis .nv-axis line {
+            stroke: none;
+            fill: none;
+        }
+
+    </style>
+
+    <script type="text/javascript">
+
+        var startDate = moment([2014, 9, 31]);
+        var endDate = moment([2014, 10, 14]);
+
+        var data = function() {
+
+            var balances = [
+
+                { date: moment([2014,10,14]), amount: 1200 },
+                { date: moment([2014,10,13]), amount: 1800 },
+                { date: moment([2014,10,12]), amount: 1100 },
+                { date: moment([2014,10,11]), amount: 1700 },
+                { date: moment([2014,10,10]), amount: 1300 },
+                { date: moment([2014,10,9]), amount: 1100 },
+                { date: moment([2014,10,8]), amount: 1100 },
+
+                { date: moment([2014,10,7]), amount: 1200 },
+                { date: moment([2014,10,6]), amount: 1800 },
+                { date: moment([2014,10,5]), amount: 1100 },
+                { date: moment([2014,10,4]), amount: 1700 },
+                { date: moment([2014,10,3]), amount: 1300 },
+                { date: moment([2014,10,2]), amount: 1100 },
+                { date: moment([2014,10,1]), amount: 1100 },
+                { date: moment([2014,9,31]), amount: 1400 }
+
+,
+
+            ];
+
+            var transactions = [
+                    /*
+                { date: moment([2014, 11, 12]), description: "LUL TICKET MACHINE CD 9249", amount: 120.60 },
+                { date: moment([2014, 11, 11]), description: "NON-STG CASH FEE CD 9249 06NOV14", amount: 2.00 },
+                { date: moment([2014, 11, 11]), description: "NON-STG TRANS FEE 2.99% CD 9249 06NOV14", amount: 2.98 },
+                { date: moment([2014, 11, 11]), description: "NATBG ARRIVALS LEF IL 600.00 VISAXR 6.0036 CD 9249 06NOV14", amount: 99.94 },
+                { date: moment([2014, 11, 3]), description: "Uber BV CD 9249", amount: 13.17 },
+                { date: moment([2014, 11, 3]), description: "SNAX EXPRESS CD 9249", amount: 28.98 },
+                { date: moment([2014, 11, 3]), description: "Uber BV CD 9249", amount: 21.55 },
+                { date: moment([2014, 11, 3]), description: "UNIVERSAL ALL IN 1 CD 9249", amount: 14.78 },
+                { date: moment([2014, 11, 3]), description: "NUFFIELD HEALTH BACS0072041.05746", amount: 30.00 }*/
+
+                { date: moment([2014,10,7]), description: 'TSGN CD 9249', amount: 14.4 },
+                { date: moment([2014,10,5]), description: 'NON-STG TRANS FEE 2.99% CD 9249', amount: 0.13 },
+                { date: moment([2014,10,5]), description: 'GH *GITHUB.COM US 07.00 VISAXR 1.59453 CD 9249', amount: 4.39 },
+                { date: moment([2014,10,5]), description: 'LOYD BAKER STREET CD 9249 05NOV14', amount: 200 },
+                { date: moment([2014,10,5]), description: 'LOYD BAKER STREET CD 9249 05NOV14', amount: 10 },
+                { date: moment([2014,10,4]), description: 'RESTAURANT ASSOCIA CD 9249', amount: 50 },
+                { date: moment([2014,10,4]), description: 'STARBUCKS CD 9249', amount: 1.5 },
+                { date: moment([2014,10,3]), description: 'Uber BV CD 9249', amount: 13.17 },
+                { date: moment([2014,10,3]), description: 'SNAX EXPRESS CD 9249', amount: 28.98 },
+                { date: moment([2014,10,3]), description: 'Uber BV CD 9249', amount: 21.55 },
+                { date: moment([2014,10,3]), description: 'UNIVERSAL ALL IN 1 CD 9249', amount: 14.78 },
+                { date: moment([2014,10,3]), description: 'NUFFIELD HEALTH BACS0072041.05746', amount: 30 },
+                { date: moment([2014,10,3]), description: 'BRITISH RED CROSS IH118377405', amount: 8 },
+                { date: moment([2014,10,3]), description: 'BOOTS,BAKER STREET CD 9249', amount: 3.15 },
+                { date: moment([2014,9,31]), description: 'WOWCHER CD 9249', amount: 19 },
+                { date: moment([2014,9,31]), description: 'YOUMESUSHI CD 9249', amount: 8.95 },
+                { date: moment([2014,10,6]), description: 'PRET A MANGER-LUTON AI LUTON 826', amount: 8.74 },
+                { date: moment([2014,10,5]), description: 'PETER SULLIVAN MCDONAL LONDON 826', amount: 5.79 },
+                { date: moment([2014,10,5]), description: 'APPLE ITUNES STORE GBP LUXEMBURG 442', amount: 0.99 },
+                { date: moment([2014,10,4]), description: 'NANDOS BAKER STREET LONDON 826', amount: 10.8 },
+                { date: moment([2014,10,2]), description: 'NON-STERLING TRANSACTION FEE', amount: 6.99 },
+                { date: moment([2014,10,2]), description: 'GODADDY.COM SCOTTSDALE 840', amount: 12.2 },
+                { date: moment([2014,10,2]), description: 'WAITROSE JOHN BARNES LONDON 826', amount: 26.86 },
+
+            ];
+
+            var generateValues = function(periodStartDate, periodEndDate, transactionDate, value)
+            {
+                var values = [];
+                var numberOfDays = periodEndDate.diff(periodStartDate, 'days');
+
+                for (var i = 0; i < numberOfDays; i++) {
+                    var itemDate = moment(periodStartDate).add(i, 'days');
+                    var itemValue = itemDate.isSame(transactionDate) ? value : 0;
+
+                    values.push({
+                        x: i,
+                        y: itemValue,
+                        date: itemDate,
+                        amount: itemValue
+                    })
+                }
+
+                return values;
+            };
+
+            var transactionSeries = transactions.map(function(transaction) {
+                return {
+                    key: transaction.description,
+                    bar: true,
+                    type: "bar",
+                    xAxis: 1,
+                    yAxis: 1,
+                    values: generateValues(startDate, endDate, transaction.date, transaction.amount)
+                }
+            });
+
+            var balanceSeries = {
+                key: "Currency Account Balance",
+                type: "area",
+                xAxis: 1,
+                yAxis: 2,
+                values: balances.map(function(balance) {
+                    return {
+                        x: balance.date.diff(startDate, 'days'),
+                        y: balance.amount,
+                        amount: balance.amount,
+                        date: balance.date
+                    };
+                })
+            };
+
+            return [ balanceSeries ].concat(transactionSeries);
+
+            //transactionSeries.push(balanceSeries);
+
+            //return transactionSeries;
+
+//            return [ balanceSeries ];
+
+
+        }
+
+        $(document).ready(function () {
+
+            numeral.language('en-gb');
+
+            nv.addGraph(function() {
+                var chart = nv.models.multiChart()
+                        .tooltipContent(function(key, x, y, e, graph) {
+                            return '<h3>' + key + '</h3>' +
+                                    '<p>' + numeral(e.point.amount).format('$0,0.00') + ' on ' + e.point.date.format('ll') + '</p>'
+                        });
+
+                //chart.color(colorbrewer.OrRd[4]);
+                //chart.barColor(colorbrewer.Set3[12]);
+                chart.color(["#94beef"]);
+
+                //chart.color(d3.scale.category10().range())
+
+                chart
+                        .showLegend(false);
+
+                chart.bars1.stacked(true);
+
+                chart.xAxis
+                        .tickFormat(function(d) {
+                            return moment(startDate).add(d, 'days').format('ll');
+                        });
+
+                chart.yAxis1
+                        .tickFormat(function(d) { return numeral(d).format('$0,0'); });
+
+                chart.yAxis2
+                        .tickFormat(function(d) { return numeral(d).format('$0,0'); });
+
+                d3.select('#chart svg')
+                        .datum(data())
+                        .transition().duration(500)
+                        .call(chart);
+
+                // Hack to reorder svg elements so bars appear in front of area
+                var g = d3.select('g.wrap.nvd3.multiChart g');
+                var bars1Wrap = d3.select('g.bars1Wrap').remove();
+                g.append(function() { return bars1Wrap[0][0]; });
+
+                nv.utils.windowResize(chart.update);
+
+                return chart;
+            });
+        });
+    </script>
+</head>
+<body>
+
+<div id="chart">
+    <svg></svg>
+</div>
+
+</body>
+</html>
